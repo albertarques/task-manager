@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 abstract class AbstractEntity
 {
@@ -13,9 +14,11 @@ abstract class AbstractEntity
     #[ORM\Column]
     protected ?int $id = null;
 
+    #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    protected ?\DateTimeInterface $createdAt = null;
+    protected \DateTimeInterface $createdAt;
 
+    #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?\DateTimeInterface $updatedAt = null;
 
