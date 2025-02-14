@@ -28,6 +28,12 @@ class Task
     #[ORM\Column(type: Types::STRING, options: ['default' => TaskStatusEnum::PENDING])]
     private ?TaskStatusEnum $status = TaskStatusEnum::PENDING;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
+
 
     public function getId(): ?int
     {
@@ -78,6 +84,30 @@ class Task
     public function setStatus(TaskStatusEnum $status): static
     {
         $this->status = $status;
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
         return $this;
     }
 
