@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Enum\StatusEnum;
 use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
