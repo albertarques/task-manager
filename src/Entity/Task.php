@@ -22,6 +22,10 @@ class Task extends AbstractEntity
     #[ORM\Column(type: Types::STRING, enumType: TaskStatusEnum::class, options: ['default' => TaskStatusEnum::PENDING->value])]
     private ?TaskStatusEnum $status = TaskStatusEnum::PENDING;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function getTitle(): ?string
     {
         return $this->title;
@@ -66,6 +70,18 @@ class Task extends AbstractEntity
     public function setStatus(TaskStatusEnum $status): static
     {
         $this->status = $status;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
         return $this;
     }
 }
