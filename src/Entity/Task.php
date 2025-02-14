@@ -19,7 +19,7 @@ class Task extends AbstractEntity
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dueDate = null;
 
-    #[ORM\Column(type: Types::STRING, options: ['default' => TaskStatusEnum::PENDING])]
+    #[ORM\Column(type: Types::STRING, enumType: TaskStatusEnum::class, options: ['default' => TaskStatusEnum::PENDING->value])]
     private ?TaskStatusEnum $status = TaskStatusEnum::PENDING;
 
     public function getTitle(): ?string
