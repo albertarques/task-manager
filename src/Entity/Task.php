@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Enum\TaskStatusEnum;
+use App\Enum\TaskStatusEnum;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task extends AbstractEntity
