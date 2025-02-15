@@ -16,7 +16,7 @@ class HomeController extends AbstractController
             'controller_name' => 'HomeController',
             'title' => 'Home',
             'page' => 'home',
-            'tasks' => $tr->findAll(),
+            'tasks' => $tr->findAllSortedByCreatedAtQB(),
         ]);
     }
 }
