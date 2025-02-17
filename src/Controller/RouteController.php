@@ -19,21 +19,4 @@ class RouteController extends AbstractController
             'page' => 'home',
         ]);
     }
-
-    #[Route('/login', name: 'login')]
-    public function login(): Response
-    {
-        return $this->render('login.html.twig', [
-            'controller_name' => 'LoginController',
-        ]);
-    }
-
-    #[Route('/register', name: 'register')]
-    public function register(): Response
-    {
-        return $this->render('register_new_user.html.twig', [
-            'controller_name' => 'RegisterController',
-        ]);
-    }
-
 }
