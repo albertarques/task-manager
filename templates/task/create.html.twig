@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Crear una Nueva Tarea</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-primary">Guardar</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('task_index') }}">Volver a la lista</a>
+{% endblock %}
