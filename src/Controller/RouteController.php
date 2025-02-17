@@ -20,17 +20,6 @@ class RouteController extends AbstractController
         ]);
     }
 
-    #[Route('/tasks/user/{id}', name: 'tasks_by_user')]
-    public function getTasksByUser(User $user, TaskRepository $taskRepository): Response
-    {
-        $tasks = $taskRepository->findByUser($user);
-
-        return $this->render('tasks_by_user.html.twig', [
-            'tasks' => $tasks,
-            'user' => $user,
-        ]);
-    }
-
     #[Route('/login', name: 'login')]
     public function login(): Response
     {
