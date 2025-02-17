@@ -12,17 +12,23 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class TaskController extends AbstractController
 {
-    #[Route('/tasks', name: 'task_index', methods: ['GET'])]
+    #[Route('/tasks', name: 'app_task_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        $tasks = $entityManager->getRepository(Task::class)->findAll();
+        $user = $this->getUser();
+        if(!$user instanceof \App\Entity\User) {
+            throw $this->createAccessDeniedException('Debes estar autenticado para ver tus tareas.');
+        }
+
+        $tasks = $entityManager->getRepository(Task::class)->findAllByUser($user);
 
         return $this->render('task/index.html.twig', [
             'tasks' => $tasks,
+            'user' => $user,
         ]);
     }
 
-    #[Route('/tasks/new', name: 'task_new', methods: ['GET', 'POST'])]
+    #[Route('/tasks/new', name: 'app_task_new', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $task = new Task();
@@ -34,7 +40,7 @@ class TaskController extends AbstractController
             $entityManager->persist($task);
             $entityManager->flush();
 
-            return $this->redirectToRoute('task_index');
+            return $this->redirectToRoute('app_task_index');
         }
 
         return $this->render('task/create.html.twig', [
@@ -42,15 +48,17 @@ class TaskController extends AbstractController
         ]);
     }
 
-    #[Route('/tasks/{id}/edit', name: 'task_edit', methods: ['GET', 'POST'])]
+    #[Route('/tasks/{id}/edit', name: 'app_task_edit', methods: ['GET', 'POST'])]
     public function edit(Task $task, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('TASK_EDIT', $task);
+
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-            return $this->redirectToRoute('task_index');
+            return $this->redirectToRoute('app_task_index');
         }
 
         return $this->render('task/edit.html.twig', [
@@ -59,12 +67,14 @@ class TaskController extends AbstractController
         ]);
     }
 
-    #[Route('/tasks/{id}/delete', name: 'task_delete', methods: ['POST'])]
+    #[Route('/tasks/{id}/delete', name: 'app_task_delete', methods: ['POST'])]
     public function delete(Task $task, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('TASK_DELETE', $task);
+
         $entityManager->remove($task);
         $entityManager->flush();
 
-        return $this->redirectToRoute('task_index');
+        return $this->redirectToRoute('app_task_index');
     }
 }
