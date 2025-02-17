@@ -30,6 +30,24 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist($task);
         }
 
+        $userRepository = $manager->getRepository(User::class);
+        $user = $userRepository->findOneBy(['email' => 'albertarques@gmail.com']);
+
+        for ($i = 1; $i <= 5; $i++) {
+            $task = new Task();
+            $task->setTitle("Tarea ejemplo $i");
+            $task->setDescription("Descripción de la tarea $i para el usuario albertarques@gmail.com");
+            $task->setDueDate((new \DateTime())->modify("+$i days"));
+
+            $statuses = TaskStatusEnum::cases();
+            $randomStatus = $statuses[array_rand($statuses)];
+            $task->setStatus($randomStatus);
+
+            $task->setUser($user);
+            $manager->persist($task);
+        }
+
+
         $manager->flush();
     }
 
