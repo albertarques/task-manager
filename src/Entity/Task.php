@@ -22,7 +22,7 @@ class Task extends AbstractEntity
     #[ORM\Column(type: Types::STRING, enumType: TaskStatusEnum::class, options: ['default' => TaskStatusEnum::PENDING->value])]
     private ?TaskStatusEnum $status = TaskStatusEnum::PENDING;
 
-    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 

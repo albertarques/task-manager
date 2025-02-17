@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Task;
+use App\Entity\User;
 use App\Enum\DoctrineEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -21,6 +22,23 @@ class TaskRepository extends ServiceEntityRepository
     public function findAllSortedByCreatedAtQB(): QueryBuilder
     {
         return $this->createQueryBuilder('t')->orderBy('t.createdAt', DoctrineEnum::DESC->value);
+    }
+
+    /**
+     * Obtiene todas las tareas de un usuario específico.
+     *
+     * @param User $user
+     *
+     * @return Task[]
+     */
+    public function findByUser(User $user): array
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('t.dueDate', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**
