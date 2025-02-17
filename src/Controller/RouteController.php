@@ -13,12 +13,10 @@ class RouteController extends AbstractController
     #[Route('/')]
     public function index(TaskRepository $tr): Response
     {
-        // TODO: If User is logged send to user task list, if not send to login/register view
-        return $this->render('/home.html.twig', [
-            'controller_name' => 'HomeController',
+        return $this->render('/index.html.twig', [
+            'controller_name' => 'RouteController',
             'title' => 'Home',
             'page' => 'home',
-            'tasks' => $tr->findAll(),
         ]);
     }
 
