@@ -15,7 +15,7 @@ final class TaskVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::EDIT, self::VIEW])
+        return in_array($attribute, [self::EDIT, self::VIEW, self::DELETE])
             && $subject instanceof \App\Entity\Task;
     }
 
@@ -37,7 +37,7 @@ final class TaskVoter extends Voter
                 return $this->canEdit($task, $user);
             case self::VIEW:
                 return $this->canView($task, $user);
-            case seld::DELETE:
+            case self::DELETE:
                 return $this->canDelete($task, $user);
         }
 
