@@ -23,7 +23,9 @@ security:
                 default_target_path: app_task_index
             logout:
                 path: app_logout
-                # where to redirect after logout
+                target: app_home_index
+
+              # where to redirect after logout
                 # target: app_any_route
 
             # activate different ways to authenticate
@@ -38,7 +40,7 @@ security:
 #        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 #        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 #        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY } #ROLE_USER
-#        - { path: ^/tasks/user/id, roles: ROLE_USER }
+        - { path: ^/tasks/user/id, roles: ROLE_USER }
 
 
 when@test:
