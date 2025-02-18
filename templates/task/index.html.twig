@@ -1,28 +1,41 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <a href="{{ path('app_logout') }}">Cerrar Sesión</a>
-
-    <h1>Task list</h1>
-    {% for task in tasks %}
-        <div class="bg-white shadow-md rounded-lg p-6 mb-4">
-            <h2 class="text-xl font-bold text-gray-800 mb-2">{{ task.title }}</h2>
-            <p class="text-gray-600 mb-4">{{ task.description }}</p>
-            <p class="text-sm text-gray-500">Hacer antes de: {{ task.dueDate | date('d-m-Y H:i') }}</p>
-            <div class="text-sm text-gray-500">
-                {% if is_granted('TASK_EDIT', task) %}
-                    <a href="{{ path('app_task_edit', { id: task.id }) }}">Editar</a>
-                {% endif %}
-                {% if is_granted('TASK_DELETE', task) %}
-                    <form method="post" action="{{ path('app_task_delete', { id: task.id }) }}" onsubmit="return confirm('¿Estás seguro de eliminar esta tarea?');">
-                        <button type="submit">Eliminar</button>
-                    </form>
-                {% endif %}
-            </div>
+    <div class="flex flex-col items-center h-screen">
+        <h1 class="text-4xl font-bold text-gray-800 p-4">
+            Task list
+        </h1>
+        <div class="flex justify-between bg-blue-100 shadow-md rounded-lg p-6 mb-4 w-2/5">
+            <a href="{{ path('app_logout') }}" class="text-white bg-red-500 hover:bg-red-900 py-2 px-4 rounded">Logout</a>
+            <a href="{{ path('app_task_new') }}" class="text-white bg-blue-500 hover:bg-blue-900 py-2 px-4 rounded">New Task!</a>
         </div>
-    {% else %}
-        <p>Hola {{ user.email }}, no tienes tareas pendientes.</p>
-        <p>Añade alguna tarea y diviertete.</p>
-    {% endfor %}
+        {% for task in tasks %}
+            <div class="bg-blue-100 shadow-md rounded-lg p-6 mb-4 w-2/5">
+                <div class="flex justify-between">
+                    <div class="flex items-center">
+                        <p class="block text-center text-sm text-white mb-3 bg-red-500 px-4 py-2 rounded-full mr-4">Deadline: {{ task.dueDate | date('d-m-Y H:i') }}</p>
+                        <span class="block text-center text-sm text-white mb-3 bg-red-500 px-4 py-2 rounded">
+                        {{ task.status | task_status_label }}
+                    </span>
+                    </div>
+                    {% if is_granted('TASK_DELETE', task) %}
+                        <form method="post" action="{{ path('app_task_complete', { id: task.id }) }}" onsubmit="return confirm('¿Are you sure to mark this task as completed?');">
+                            <button class="text-white bg-red-500 hover:bg-red-900 py-2 px-4 rounded-full">Complete</button>
+                        </form>
+                    {% endif %}
+                </div>
+                <h2 class="text-xl font-bold text-gray-800 mb-2">{{ task.title }}</h2>
+                <p class="text-gray-600 mb-4">{{ task.description }}</p>
+                <div class="flex justify-between text-sm text-gray-500 my-2">
+                    {% if is_granted('TASK_EDIT', task) %}
+                        <a href="{{ path('app_task_edit', { id: task.id }) }}" class="text-white bg-blue-500 hover:bg-blue-900 font-bold py-2 px-4 rounded mr-4">Edit</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <p class="text-2xl text-gray-800">Hello {{ user.email }}, you don't have any task.</p>
+            <p class="text-2xl font-bold text-gray-800">Add some task and have fun!</p>
+        {% endfor %}
 
+    </div>
 {% endblock %}
