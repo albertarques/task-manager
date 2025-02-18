@@ -31,11 +31,13 @@ class TaskController extends AbstractController
     #[Route('/tasks/new', name: 'app_task_new', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $task->setUser($user);
             $task->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($task);
             $entityManager->flush();
@@ -74,6 +76,20 @@ class TaskController extends AbstractController
 
         $entityManager->remove($task);
         $entityManager->flush();
+
+        return $this->redirectToRoute('app_task_index');
+    }
+
+    #[Route('/tasks/{id}', name: 'app_task_complete', methods: ['POST', 'GET'])]
+    public function complete(Task $task, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('TASK_EDIT', $task);
+
+        $task->setStatus(\App\Enum\TaskStatusEnum::COMPLETED);
+        $entityManager->persist($task);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Task marked as completed!');
 
         return $this->redirectToRoute('app_task_index');
     }
