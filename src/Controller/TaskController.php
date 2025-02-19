@@ -17,10 +17,10 @@ class TaskController extends AbstractController
     {
         $user = $this->getUser();
         if(!$user instanceof \App\Entity\User) {
-            throw $this->createAccessDeniedException('Debes estar autenticado para ver tus tareas.');
+            throw $this->createAccessDeniedException('You need to be logged in to access this page.');
         }
 
-        $tasks = $entityManager->getRepository(Task::class)->findAllByUser($user);
+        $tasks = $entityManager->getRepository(Task::class)->findAllByUserOrderByStatusAndDuedate($user);
 
         return $this->render('task/index.html.twig', [
             'tasks' => $tasks,

@@ -31,12 +31,13 @@ class TaskRepository extends ServiceEntityRepository
      *
      * @return Task[]
      */
-    public function findAllByUser(User $user): array
+    public function findAllByUserOrderByStatusAndDuedate(User $user): array
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.user = :user')
             ->setParameter('user', $user)
-            ->orderBy('t.dueDate', 'ASC')
+            ->orderBy('t.status', 'DESC')
+            ->addOrderBy('t.dueDate', 'ASC')
             ->getQuery()
             ->getResult();
     }
